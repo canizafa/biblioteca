@@ -17,8 +17,10 @@ impl Biblioteca {
       prestamos: Vec::new()
     }
   }
-  pub fn listar_libros_por_autor(&self, autor: String) -> Vec<&Libro> {
-    self.libros.iter().filter(|l| l.comparar_autor(&autor)).collect()
+  pub fn listar_libros_por_autor(&self, autor: String) -> Option<Vec<&Libro>> {
+    let lista: Vec<&Libro> = self.libros.iter().filter(|l| l.comparar_autor(&autor)).collect();
+    if lista.is_empty() {return  None;}
+    Some(lista)
   }
   pub fn listar_prestamos_vigentes(&self) -> Vec<&Prestamo> {
     self.prestamos.iter().filter(|p| p.esta_vigente()).collect()
@@ -51,10 +53,23 @@ impl Biblioteca {
 
     prestamo_buscado.cambiar_estado(prestamo::EstadoPrestamo::Devuelto(Local::now()))?;
 
+    let libro_devuelto = self.libros.iter_mut()
+        .find_map(|l| l.obtener_por_isbn(isbn))
+        .ok_or(ErrorLibreria::Libro(ErrorLibro::LibroInexistente))?;
+
+    libro_devuelto.aumentar_copias();
+
     Ok(())
   }
   pub fn incorporar_libro(&mut self, libro: Libro) -> Result<(), ErrorLibreria> {
     
+    if self.libros
+      .iter()
+      .any(|l| l.obtener_isbn() == libro.obtener_isbn()) {return Err(ErrorLibreria::Libro(ErrorLibro::LibroDuplicado));}
+    else {
+      self.libros.push(libro);
+      Ok(())
+    }
   }
 }
 

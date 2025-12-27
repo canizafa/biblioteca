@@ -1,3 +1,5 @@
+use core::fmt;
+
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -71,4 +73,13 @@ impl Prestamo {
       Ok(())
     }
   }
+}
+
+impl fmt::Display for Prestamo {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f,
+          "ISBN: {}. \nPrestatario: {}. \nFecha del préstamo: {}.",
+          self.isbn_libro, self.prestatario, self.fecha_prestamo
+        )
+    }
 }
