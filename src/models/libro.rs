@@ -1,7 +1,6 @@
 use core::fmt;
 
 use crate::errores::ErrorLibro;
-use chrono::NaiveDate;
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
@@ -35,7 +34,7 @@ pub struct Libro {
   titulo: String,
   autor: String,
   isbn: u128,
-  anio_publicacion: NaiveDate,
+  anio_publicacion: u128,
   genero: GeneroLiterario,
   copias_disponibles: u8
 }
@@ -46,7 +45,7 @@ impl Libro {
     titulo: String,
     autor: String,
     isbn: u128,
-    anio_publicacion: NaiveDate,
+    anio_publicacion: u128,
     genero: GeneroLiterario,
     copias_disponibles: u8
   ) -> Self {

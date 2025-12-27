@@ -1,0 +1,14 @@
+{
+  "libros": [
+    {
+      "id": "03f05878-7684-4bd6-ac01-76da3ec492bb",
+      "titulo": "Cien-anios-de-soledad",
+      "autor": "Marquez",
+      "isbn": 1234,
+      "anio_publicacion": 2010,
+      "genero": "Romance",
+      "copias_disponibles": 10
+    }
+  ],
+  "prestamos": []
+}

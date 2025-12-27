@@ -1,4 +1,4 @@
-use chrono::{Local, NaiveDate};
+use chrono::{Datelike, Local};
 use uuid::Uuid;
 
 use crate::{biblioteca::Biblioteca, errores::ErrorAgregarLibro, models::libro::{GeneroLiterario, Libro}};
@@ -9,7 +9,7 @@ pub fn agregar_libro(
   titulo: String, 
   autor: String, 
   isbn: u128, 
-  anio_publicacion: NaiveDate, 
+  anio_publicacion: u128,
   genero: GeneroLiterario, 
   copias_disponibles: u8
 ) -> Result<(), ErrorAgregarLibro> {
@@ -17,7 +17,7 @@ pub fn agregar_libro(
   if titulo.trim().is_empty() {return Err(ErrorAgregarLibro::AutorNulo);}
   if autor.trim().is_empty() {return Err(ErrorAgregarLibro::AutorNulo);}
   if isbn <= 0 {return Err(ErrorAgregarLibro::IsbnNulo);}
-  if Local::now().date_naive().signed_duration_since(anio_publicacion).num_days() < 0 {return Err(ErrorAgregarLibro::FechaInvalida);}
+  if Local::now().year() - anio_publicacion as i32 <= 0 {return Err(ErrorAgregarLibro::FechaInvalida);}
   if copias_disponibles <= 0 {return Err(ErrorAgregarLibro::CantidadDeCopiasInvalida);}
 
   let libro = Libro::new(

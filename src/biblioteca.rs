@@ -1,9 +1,11 @@
 use chrono::Local;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{errores::{ErrorLibreria, ErrorLibro, ErrorPrestamo}, models::{libro::Libro, prestamo::{self, Prestamo}}};
 
 
+#[derive(Serialize, Deserialize)]
 pub struct Biblioteca {
   libros: Vec<Libro>,
   prestamos: Vec<Prestamo>,

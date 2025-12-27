@@ -98,6 +98,7 @@ impl fmt::Display for ErrorListarLibro {
     }
 }
 
+#[derive(Debug)]
 pub enum ErrorPrestamosVigentes {
     ListaVacia,   
 }
@@ -109,6 +110,7 @@ impl fmt::Display for ErrorPrestamosVigentes {
     }
 }
 
+#[derive(Debug)]
 pub enum ErrorRegistrarPrestamo {
     IsbnNulo,
     PrestatarioNulo,
@@ -130,6 +132,7 @@ impl From<ErrorLibreria> for ErrorRegistrarPrestamo {
     }
 }
 
+#[derive(Debug)]
 pub enum ErrorRegistrarDevolucion {
     PrestamoNoEncontrado,
     IsbnNulo,
@@ -156,7 +159,50 @@ impl From<ErrorLibreria> for ErrorRegistrarDevolucion {
 
 
 #[derive(Debug)]
-pub enum ErrorComando {
+pub enum ErrorApp {
+    RegistrarPrestamo(ErrorRegistrarPrestamo),
+    RegistrarDevolucion(ErrorRegistrarDevolucion),
+    ListarLibros(ErrorListarLibro),
+    ListarPrestamos(ErrorPrestamosVigentes),
     AgregarLibro(ErrorAgregarLibro),
-    ListarLibro(ErrorListarLibro),
+    GuardarDatos
+}
+
+impl fmt::Display for ErrorApp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ErrorApp::RegistrarPrestamo(e) => write!(f,"Error de registro de prestamo {}.",e),
+            ErrorApp::RegistrarDevolucion(e) => write!(f,"Error de devolucion: {}",e),
+            ErrorApp::ListarLibros(e) => write!(f, "Error de listado de libros: {}",e),
+            ErrorApp::ListarPrestamos(e) => write!(f,"Error al listar los prestamos: {}",e),
+            ErrorApp::AgregarLibro(e) => write!(f,"Error al agregar libro: {}",e),
+            ErrorApp::GuardarDatos => write!(f,"No se pudo guardar los datos"),
+        }
+    }
+}
+
+impl From<ErrorRegistrarPrestamo> for ErrorApp {
+    fn from(e: ErrorRegistrarPrestamo) -> Self {
+        ErrorApp::RegistrarPrestamo(e)
+    }
+}
+impl From<ErrorRegistrarDevolucion> for ErrorApp {
+    fn from(e: ErrorRegistrarDevolucion) -> Self {
+        ErrorApp::RegistrarDevolucion(e)
+    }
+}
+impl From<ErrorListarLibro> for ErrorApp {
+    fn from(e: ErrorListarLibro) -> Self {
+        ErrorApp::ListarLibros(e)
+    }
+}
+impl From<ErrorPrestamosVigentes> for ErrorApp {
+    fn from(e: ErrorPrestamosVigentes) -> Self {
+        ErrorApp::ListarPrestamos(e)
+    }
+}
+impl From<ErrorAgregarLibro> for ErrorApp {
+    fn from(e: ErrorAgregarLibro) -> Self {
+        ErrorApp::AgregarLibro(e)
+    }
 }
