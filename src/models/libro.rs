@@ -60,8 +60,11 @@ impl Libro {
       copias_disponibles
     }
   }
-  pub fn comparar_autor(&self, autor: String) -> bool {
-    self.autor == autor
+  pub fn obtener_isbn(&self) -> u128 {
+    self.isbn
+  }
+  pub fn comparar_autor(&self, autor: &String) -> bool {
+    self.autor == *autor
   }
   pub fn obtener_por_isbn(&mut self, isbn: u128) -> Option<&mut Libro> {
     if self.isbn == isbn {
