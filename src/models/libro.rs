@@ -87,7 +87,7 @@ impl Libro {
 impl fmt::Display for Libro {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, 
-          "Titulo: {}. \nAutor: {}. \nISBN: {}. \nAño de publicación: {}. \n Género literario: {}.",
+          "Titulo: {}. \nAutor: {}. \nISBN: {}. \nAño de publicación: {}. \nGénero literario: {}.",
           self.titulo, self.autor, self.isbn, self.anio_publicacion, self.genero
         )
     }

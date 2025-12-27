@@ -4,6 +4,7 @@ mod biblioteca;
 mod errores;
 mod commands;
 
+use std::env;
 use clap::{Parser, Subcommand};
 use crate::biblioteca::Biblioteca;
 use crate::commands::{
@@ -16,6 +17,7 @@ use crate::commands::{
 use crate::errores::ErrorApp;
 use crate::models::libro::GeneroLiterario;
 use crate::storage::storage::{cargar_libreria, guardar_libreria};
+use colored::*;
 
 
 #[derive(Parser)]
@@ -73,8 +75,14 @@ enum Action {
 }
 
 fn main() -> Result<(), ErrorApp> {
+
+    println!("{}", "Bienvenido a Librero".bright_green().bold());
     
-    let mut libreria = cargar_libreria("data/libreria.json").unwrap_or_else(|_| Biblioteca::new());
+    let home = env::var("HOME").unwrap_or_else(|_| ".".to_string());
+
+    let path = format!("{}/.librero/libreria.json", home);
+
+    let mut libreria = cargar_libreria(&path).unwrap_or_else(|_| Biblioteca::new());
     let cli = Cli::parse();
 
     match cli.action {
@@ -123,6 +131,6 @@ fn main() -> Result<(), ErrorApp> {
         },
     }
 
-    if guardar_libreria(&libreria, "data/libreria.json").is_err() {eprintln!("{}", ErrorApp::GuardarDatos);}
+    if guardar_libreria(&libreria, &path).is_err() {eprintln!("{}", ErrorApp::GuardarDatos);}
     Ok(())
 }

@@ -8,7 +8,43 @@
       "anio_publicacion": 2010,
       "genero": "Romance",
       "copias_disponibles": 10
+    },
+    {
+      "id": "9ca13365-4ab3-4c1e-a7e6-c61ae1bd7f6f",
+      "titulo": "It",
+      "autor": "King",
+      "isbn": 4321,
+      "anio_publicacion": 2010,
+      "genero": "Romance",
+      "copias_disponibles": 10
     }
   ],
-  "prestamos": []
+  "prestamos": [
+    {
+      "id": "7dc33465-3670-45ad-9f92-78513e0ed83d",
+      "isbn_libro": 4321,
+      "prestatario": "Facundo Caniza",
+      "estado_prestamo": {
+        "Devuelto": "2025-12-27T16:59:34.345896253-03:00"
+      },
+      "fecha_prestamo": "2025-12-27T16:33:34.385905624-03:00",
+      "fecha_devolucion": "2025-12-27T16:59:34.345904990-03:00"
+    },
+    {
+      "id": "5b75e1a1-4e92-4e3a-901d-d7cffcb6358e",
+      "isbn_libro": 4321,
+      "prestatario": "Facundo Caniza",
+      "estado_prestamo": "EnCurso",
+      "fecha_prestamo": "2025-12-27T16:58:54.434076227-03:00",
+      "fecha_devolucion": null
+    },
+    {
+      "id": "1f6cb835-75de-4eff-9ee0-2aaca705e3fa",
+      "isbn_libro": 4321,
+      "prestatario": "Facundo Caniza",
+      "estado_prestamo": "EnCurso",
+      "fecha_prestamo": "2025-12-27T16:59:36.165210097-03:00",
+      "fecha_devolucion": null
+    }
+  ]
 }

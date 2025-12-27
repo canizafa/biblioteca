@@ -73,6 +73,10 @@ impl Prestamo {
       Ok(())
     }
   }
+  pub fn agregar_fecha_devolucion(&mut self, fecha_devolucion: DateTime<Local>) -> Result<(), ErrorPrestamo> {
+    self.fecha_devolucion = Some(fecha_devolucion);
+    Ok(())
+  }
 }
 
 impl fmt::Display for Prestamo {

@@ -33,6 +33,12 @@ impl Biblioteca {
         .iter_mut()
         .find_map(|l| l.obtener_por_isbn(isbn)).ok_or(ErrorLibro::LibroInexistente)?;
 
+    if self.prestamos
+      .iter()
+      .any(|p| p.obtener_isbn_libro() == isbn && *p.obtener_prestatario() == prestatario) {
+        return Err(ErrorLibreria::Prestamo(ErrorPrestamo::PrestamoExistente));
+      }
+
     let restantes = libro_buscado.disminuir_copias()?;
 
     let prestamo = Prestamo::new(Uuid::new_v4(),
@@ -54,6 +60,7 @@ impl Biblioteca {
       .ok_or(ErrorLibreria::Prestamo(ErrorPrestamo::PrestamoInexistente))?;
 
     prestamo_buscado.cambiar_estado(prestamo::EstadoPrestamo::Devuelto(Local::now()))?;
+    prestamo_buscado.agregar_fecha_devolucion(Local::now())?;
 
     let libro_devuelto = self.libros.iter_mut()
         .find_map(|l| l.obtener_por_isbn(isbn))

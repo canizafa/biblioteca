@@ -1,4 +1,5 @@
 use core::fmt;
+use colored::*;
 
 #[derive(Debug)]
 pub enum ErrorLibro {
@@ -21,6 +22,7 @@ pub enum ErrorPrestamo {
   DiasNegativos,
   PrestamoInexistente,
   EstadoInvalido,
+  PrestamoExistente,
 }
 impl fmt::Display for ErrorPrestamo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -28,6 +30,7 @@ impl fmt::Display for ErrorPrestamo {
             ErrorPrestamo::DiasNegativos => write!(f, "Cantidad de días transcurridos inválido"),
             ErrorPrestamo::PrestamoInexistente => write!(f,"El préstamo no existe"),
             ErrorPrestamo::EstadoInvalido => write!(f,"El cambio de estado no se pudo realizar"),
+            ErrorPrestamo::PrestamoExistente => write!(f, "El prestamo ya fue ingresado"),
         }
     }
 }
@@ -63,7 +66,6 @@ pub enum ErrorAgregarLibro {
     AutorNulo,
     FechaInvalida,
     CantidadDeCopiasInvalida,
-    TituloNulo,
     Libreria(ErrorLibreria)
 }
 impl fmt::Display for ErrorAgregarLibro {
@@ -73,7 +75,6 @@ impl fmt::Display for ErrorAgregarLibro {
             ErrorAgregarLibro::AutorNulo => write!(f, "EL autor no puede estar vacío"),
             ErrorAgregarLibro::FechaInvalida => write!(f, "La fecha no puede ser superior a la fecha actual"),
             ErrorAgregarLibro::CantidadDeCopiasInvalida => write!(f, "La cantidad de copias no puede ser menor o igual a 0"),
-            ErrorAgregarLibro::TituloNulo => write!(f, "El título no puede estar vacío"),
             ErrorAgregarLibro::Libreria(e) => write!(f,"Error de libreria: {}",e),
         }
     }
