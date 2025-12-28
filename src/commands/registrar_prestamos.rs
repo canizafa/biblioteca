@@ -1,10 +1,10 @@
-use crate::{biblioteca::Biblioteca, errores::ErrorRegistrarPrestamo};
+use crate::{biblioteca::Biblioteca, errores::{ErrorLibreria, ErrorPrestamo}};
 
 
-pub fn registrar_prestamo(isbn: u128, prestatario: String, libreria: &mut Biblioteca) -> Result<(), ErrorRegistrarPrestamo> {
+pub fn registrar_prestamo(isbn: u128, prestatario: String, libreria: &mut Biblioteca) -> Result<(), ErrorLibreria> {
 
-  if isbn <= 0 {return Err(ErrorRegistrarPrestamo::IsbnNulo);}
-  if prestatario.trim().is_empty() {return Err(ErrorRegistrarPrestamo::PrestatarioNulo);}
+  if isbn <= 0 {return Err(ErrorLibreria::Prestamo(ErrorPrestamo::IsbnNulo));}
+  if prestatario.trim().is_empty() {return Err(ErrorLibreria::Prestamo(ErrorPrestamo::PrestatarioNulo));}
 
   libreria.registrar_prestamo(isbn, prestatario)?;
 

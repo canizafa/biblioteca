@@ -2,7 +2,7 @@ use chrono::{Datelike, Local};
 use colored::Colorize;
 use uuid::Uuid;
 
-use crate::{biblioteca::Biblioteca, errores::ErrorAgregarLibro, models::libro::{GeneroLiterario, Libro}};
+use crate::{biblioteca::Biblioteca, errores::{ErrorLibreria, ErrorLibro}, models::libro::{GeneroLiterario, Libro}};
 
 
 pub fn agregar_libro(
@@ -13,13 +13,13 @@ pub fn agregar_libro(
   anio_publicacion: u128,
   genero: GeneroLiterario, 
   copias_disponibles: u8
-) -> Result<(), ErrorAgregarLibro> {
+) -> Result<(), ErrorLibreria> {
     
-  if titulo.trim().is_empty() {return Err(ErrorAgregarLibro::AutorNulo);}
-  if autor.trim().is_empty() {return Err(ErrorAgregarLibro::TituloNulo);}
-  if isbn <= 0 {return Err(ErrorAgregarLibro::IsbnNulo);}
-  if Local::now().year() - anio_publicacion as i32 <= 0 {return Err(ErrorAgregarLibro::FechaInvalida);}
-  if copias_disponibles <= 0 {return Err(ErrorAgregarLibro::CantidadDeCopiasInvalida);}
+  if titulo.trim().is_empty() {return Err(ErrorLibreria::Libro(ErrorLibro::AutorNulo));}
+  if autor.trim().is_empty() {return Err(ErrorLibreria::Libro(ErrorLibro::TituloNulo));}
+  if isbn <= 0 {return Err(ErrorLibreria::Libro(ErrorLibro::IsbnNulo));}
+  if Local::now().year() - anio_publicacion as i32 <= 0 {return Err(ErrorLibreria::Libro(ErrorLibro::FechaInvalida));}
+  if copias_disponibles <= 0 {return Err(ErrorLibreria::Libro(ErrorLibro::CopiasInsuficientes));}
 
   let libro = Libro::new(
     Uuid::new_v4(),

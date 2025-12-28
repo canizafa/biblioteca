@@ -32,27 +32,27 @@ impl Prestamo {
       fecha_devolucion: None
     }
   }
-  pub fn dias_transcurridos(&self) -> Result<(i64, EstadoPrestamo), ErrorPrestamo> {
-    match self.estado_prestamo {
-        EstadoPrestamo::Devuelto(date_time) => {
-          Ok((
-            date_time.signed_duration_since(self.fecha_prestamo).num_days(),
-            EstadoPrestamo::Devuelto(date_time)
-        ))
-        },
-        EstadoPrestamo::EnCurso => {
-          let days = Local::now().signed_duration_since(self.fecha_prestamo).num_days();
-          if days.is_negative() {
-            Err(ErrorPrestamo::DiasNegativos)
-          } else {
-            Ok((
-              days,
-              EstadoPrestamo::EnCurso
-            ))
-          }
-        }
-    }
-  }
+  // pub fn dias_transcurridos(&self) -> Result<(i64, EstadoPrestamo), ErrorPrestamo> {
+  //   match self.estado_prestamo {
+  //       EstadoPrestamo::Devuelto(date_time) => {
+  //         Ok((
+  //           date_time.signed_duration_since(self.fecha_prestamo).num_days(),
+  //           EstadoPrestamo::Devuelto(date_time)
+  //       ))
+  //       },
+  //       EstadoPrestamo::EnCurso => {
+  //         let days = Local::now().signed_duration_since(self.fecha_prestamo).num_days();
+  //         if days.is_negative() {
+  //           Err(ErrorPrestamo::DiasNegativos)
+  //         } else {
+  //           Ok((
+  //             days,
+  //             EstadoPrestamo::EnCurso
+  //           ))
+  //         }
+  //       }
+  //   }
+  // }
   pub fn esta_vigente(&self) -> bool {
     match self.estado_prestamo {
         EstadoPrestamo::Devuelto(_) => false,

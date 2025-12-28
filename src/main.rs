@@ -14,7 +14,7 @@ use crate::commands::{
     registrar_devolucion::registrar_devolucion,
     registrar_prestamos::registrar_prestamo
 };
-use crate::errores::ErrorApp;
+use crate::errores::ErrorLibreria;
 use crate::models::libro::GeneroLiterario;
 use crate::storage::storage::{cargar_libreria, guardar_libreria};
 
@@ -73,7 +73,7 @@ enum Action {
     },
 }
 
-fn main() -> Result<(), ErrorApp> {
+fn main() -> Result<(), ErrorLibreria> {
     
     let home = env::var("HOME").unwrap_or_else(|_| ".".to_string());
 
@@ -127,6 +127,6 @@ fn main() -> Result<(), ErrorApp> {
         },
     }
 
-    if guardar_libreria(&libreria, &path).is_err() {eprintln!("{}", ErrorApp::GuardarDatos);}
+    if guardar_libreria(&libreria, &path).is_err() {eprintln!("{}", ErrorLibreria::DatosNoGuardados);}
     Ok(())
 }

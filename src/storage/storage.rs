@@ -1,18 +1,18 @@
 use std::{fs, path::Path};
 
-use crate::{biblioteca::Biblioteca, errores::ErrorApp};
+use crate::{biblioteca::Biblioteca, errores::ErrorLibreria};
 
 
-pub fn cargar_libreria(path: &str) -> Result<Biblioteca, ErrorApp> {
+pub fn cargar_libreria(path: &str) -> Result<Biblioteca, ErrorLibreria> {
 
     if !Path::new(path).exists() {
       
         if let Some(parent) = Path::new(path).parent() {
-            if fs::create_dir_all(parent).is_err() {return Err(ErrorApp::DirectorioSinCrear); }
+            if fs::create_dir_all(parent).is_err() {return Err(ErrorLibreria::PathNoEncontrado); }
         }
         
         let biblioteca_vacia = Biblioteca::new();
-        if guardar_libreria(&biblioteca_vacia, path).is_err() {return Err(ErrorApp::DirectorioSinCrear);}
+        if guardar_libreria(&biblioteca_vacia, path).is_err() {return Err(ErrorLibreria::PathNoEncontrado);}
         
         return Ok(biblioteca_vacia);
     }
@@ -22,10 +22,10 @@ pub fn cargar_libreria(path: &str) -> Result<Biblioteca, ErrorApp> {
   Ok(biblioteca)
 }
 
-pub fn guardar_libreria(libreria: &Biblioteca, path: &str) -> Result<(), ErrorApp> {
+pub fn guardar_libreria(libreria: &Biblioteca, path: &str) -> Result<(), ErrorLibreria> {
 
   if let Some(parent) = Path::new(path).parent() {
-    if fs::create_dir(parent).is_err() {return Err(ErrorApp::DirectorioSinCrear);}
+    if fs::create_dir(parent).is_err() {return Err(ErrorLibreria::PathNoEncontrado);}
   }
 
   let json = serde_json::to_string_pretty(libreria).unwrap();
