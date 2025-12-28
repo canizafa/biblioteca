@@ -17,7 +17,6 @@ use crate::commands::{
 use crate::errores::ErrorApp;
 use crate::models::libro::GeneroLiterario;
 use crate::storage::storage::{cargar_libreria, guardar_libreria};
-use colored::*;
 
 
 #[derive(Parser)]
@@ -75,8 +74,6 @@ enum Action {
 }
 
 fn main() -> Result<(), ErrorApp> {
-
-    println!("{}", "Bienvenido a Librero".bright_green().bold());
     
     let home = env::var("HOME").unwrap_or_else(|_| ".".to_string());
 

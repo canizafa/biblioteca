@@ -170,7 +170,8 @@ pub enum ErrorApp {
     ListarLibros(ErrorListarLibro),
     ListarPrestamos(ErrorPrestamosVigentes),
     AgregarLibro(ErrorAgregarLibro),
-    GuardarDatos
+    GuardarDatos,
+    DirectorioSinCrear,
 }
 
 impl fmt::Display for ErrorApp {
@@ -181,6 +182,7 @@ impl fmt::Display for ErrorApp {
             ErrorApp::ListarLibros(e) => write!(f, "Error de listado de libros: {}",e),
             ErrorApp::ListarPrestamos(e) => write!(f,"Error al listar los prestamos: {}",e),
             ErrorApp::AgregarLibro(e) => write!(f,"Error al agregar libro: {}",e),
+            ErrorApp::DirectorioSinCrear => write!(f,"No se pudo hallar el directorio"),
             ErrorApp::GuardarDatos => write!(f,"No se pudo guardar los datos"),
         }
     }

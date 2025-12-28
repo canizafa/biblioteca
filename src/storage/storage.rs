@@ -1,18 +1,18 @@
 use std::{fs, path::Path};
 
-use crate::biblioteca::{Biblioteca};
+use crate::{biblioteca::Biblioteca, errores::ErrorApp};
 
 
-pub fn cargar_libreria(path: &str) -> Result<Biblioteca, () > {
+pub fn cargar_libreria(path: &str) -> Result<Biblioteca, ErrorApp> {
 
     if !Path::new(path).exists() {
       
         if let Some(parent) = Path::new(path).parent() {
-            fs::create_dir_all(parent);
+            if fs::create_dir_all(parent).is_err() {return Err(ErrorApp::DirectorioSinCrear); }
         }
         
         let biblioteca_vacia = Biblioteca::new();
-        guardar_libreria(&biblioteca_vacia, path)?;
+        if guardar_libreria(&biblioteca_vacia, path).is_err() {return Err(ErrorApp::DirectorioSinCrear);}
         
         return Ok(biblioteca_vacia);
     }
@@ -22,10 +22,10 @@ pub fn cargar_libreria(path: &str) -> Result<Biblioteca, () > {
   Ok(biblioteca)
 }
 
-pub fn guardar_libreria(libreria: &Biblioteca, path: &str) -> Result<(), ()> {
+pub fn guardar_libreria(libreria: &Biblioteca, path: &str) -> Result<(), ErrorApp> {
 
   if let Some(parent) = Path::new(path).parent() {
-    fs::create_dir(parent);
+    if fs::create_dir(parent).is_err() {return Err(ErrorApp::DirectorioSinCrear);}
   }
 
   let json = serde_json::to_string_pretty(libreria).unwrap();

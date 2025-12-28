@@ -1,4 +1,5 @@
 use chrono::{Datelike, Local};
+use colored::Colorize;
 use uuid::Uuid;
 
 use crate::{biblioteca::Biblioteca, errores::ErrorAgregarLibro, models::libro::{GeneroLiterario, Libro}};
@@ -31,6 +32,7 @@ pub fn agregar_libro(
     );
 
     biblioteca.incorporar_libro(libro)?;
+    println!("{}", "Se ha agregado correctamente el libro dentro del catalogo".green());
 
   Ok(())
 }
