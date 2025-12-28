@@ -12,20 +12,20 @@ pub fn cargar_libreria(path: &str) -> Result<Biblioteca, ErrorLibreria> {
         }
         
         let biblioteca_vacia = Biblioteca::new();
-        if guardar_libreria(&biblioteca_vacia, path).is_err() {return Err(ErrorLibreria::PathNoEncontrado);}
+        guardar_libreria(&biblioteca_vacia, path).map_err(|_|ErrorLibreria::PathNoEncontrado)?;
         
         return Ok(biblioteca_vacia);
     }
 
-  let content = std::fs::read_to_string(path).unwrap();
-  let biblioteca: Biblioteca = serde_json::from_str(&content).unwrap();
+  let content = std::fs::read_to_string(path).map_err(|_| ErrorLibreria::ContenidoInexistente)?;
+  let biblioteca: Biblioteca = serde_json::from_str(&content).map_err(|_| ErrorLibreria::ParseoFallido)?;
   Ok(biblioteca)
 }
 
 pub fn guardar_libreria(libreria: &Biblioteca, path: &str) -> Result<(), ErrorLibreria> {
 
   if let Some(parent) = Path::new(path).parent() {
-    fs::create_dir(parent).map_err(|_| ErrorLibreria::PathNoEncontrado)?;
+    fs::create_dir_all(parent).map_err(|_| ErrorLibreria::PathNoEncontrado)?;
   }
 
   let json = serde_json::to_string_pretty(libreria).unwrap();

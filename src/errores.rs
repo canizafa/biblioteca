@@ -47,7 +47,8 @@ impl fmt::Display for ErrorPrestamo {
 #[derive(Debug)]
 pub enum ErrorLibreria {
     PathNoEncontrado,
-    DatosNoGuardados,
+    ContenidoInexistente,
+    ParseoFallido,
     Libro(ErrorLibro),
     Prestamo(ErrorPrestamo),
 }
@@ -65,7 +66,8 @@ impl fmt::Display for ErrorLibreria {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             ErrorLibreria::PathNoEncontrado => write!(f,"No se encuentra el directorio de la aplicación"),
-            ErrorLibreria::DatosNoGuardados => write!(f, "No se han podido guardar los datos"),
+            ErrorLibreria::ContenidoInexistente => write!(f,"No se encuentra el contenido de la aplicación"),
+            ErrorLibreria::ParseoFallido => write!(f,"El parseo de datos no se pudo realizar"),
             ErrorLibreria::Libro(e) => write!(f,"{}", e),
             ErrorLibreria::Prestamo(e) => write!(f,"{}",e),
         }

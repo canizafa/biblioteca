@@ -6,6 +6,7 @@ mod commands;
 
 use std::env;
 use clap::{Parser, Subcommand};
+use colored::Colorize;
 use crate::biblioteca::Biblioteca;
 use crate::commands::{
     agregar_libros::agregar_libro,
@@ -75,9 +76,11 @@ enum Action {
 
 fn main() -> Result<(), ErrorLibreria> {
     
+    println!("\n{}\n", "**********".bright_blue().bold());
+
     let home = env::var("HOME").unwrap_or_else(|_| ".".to_string());
 
-    let path = format!("{}/.librero/libreria.json", home);
+    let path = format!("{}/librero/libreria.json", home);
 
     let mut libreria = cargar_libreria(&path).unwrap_or_else(|_| Biblioteca::new());
     let cli = Cli::parse();
@@ -108,25 +111,28 @@ fn main() -> Result<(), ErrorLibreria> {
                 isbn, 
                 anio, 
                 genero, 
-                disponibles).unwrap_or_else(|e| eprintln!("{}",e));
+                disponibles).unwrap_or_else(|e| println!("{}",e));
         },
         Action::ListarLibros { autor } => {
             listar_libros_por_autor(&libreria, autor)
-                .unwrap_or_else(|e| eprintln!("{}",e))
+                .unwrap_or_else(|e| println!("{}",e))
         },
         Action::ListarPrestamos => {
             listar_prestamos_vigentes(&libreria)
             },
         Action::RegistrarPrestamo { isbn, prestatario } => {
             registrar_prestamo(isbn, prestatario, &mut libreria)
-                .unwrap_or_else(|e| eprintln!("{}",e));
+                .unwrap_or_else(|e| println!("{}",e));
         },
         Action::RegistrarDevolucion { isbn, prestatario } => {
             registrar_devolucion(isbn, prestatario, &mut libreria)
-                .unwrap_or_else(|e| eprintln!("{}",e));
+                .unwrap_or_else(|e| println!("{}",e));
         },
     }
 
-    if guardar_libreria(&libreria, &path).is_err() {eprintln!("{}", ErrorLibreria::DatosNoGuardados);}
+    guardar_libreria(&libreria, &path).unwrap_or_else(|e| println!("{}", e));
+    
+    println!("{}\n", "**********".bright_blue().bold());
+
     Ok(())
 }
