@@ -119,7 +119,6 @@ fn main() -> Result<(), ErrorApp> {
         },
         Action::ListarPrestamos => {
             listar_prestamos_vigentes(&libreria)
-                .unwrap_or_else(|e| eprintln!("{}",e));
             },
         Action::RegistrarPrestamo { isbn, prestatario } => {
             registrar_prestamo(isbn, prestatario, &mut libreria)

@@ -1,3 +1,5 @@
+use colored::Colorize;
+
 use crate::{biblioteca::Biblioteca, errores::ErrorListarLibro};
 
 
@@ -8,7 +10,7 @@ pub fn listar_libros_por_autor(libreria: &Biblioteca, autor: String) -> Result<(
   let lista = libreria.listar_libros_por_autor(autor);
   if let Some(lista) = lista {
     lista.iter().for_each(|l| println!("{}",l));
-  } else { return Err(ErrorListarLibro::ListaVacia) }
+  } else { println!("{}", "La lista de libros se encuentra vacía".blue().bold()) }
 
   Ok(())
 }

@@ -15,7 +15,7 @@ pub fn agregar_libro(
 ) -> Result<(), ErrorAgregarLibro> {
     
   if titulo.trim().is_empty() {return Err(ErrorAgregarLibro::AutorNulo);}
-  if autor.trim().is_empty() {return Err(ErrorAgregarLibro::AutorNulo);}
+  if autor.trim().is_empty() {return Err(ErrorAgregarLibro::TituloNulo);}
   if isbn <= 0 {return Err(ErrorAgregarLibro::IsbnNulo);}
   if Local::now().year() - anio_publicacion as i32 <= 0 {return Err(ErrorAgregarLibro::FechaInvalida);}
   if copias_disponibles <= 0 {return Err(ErrorAgregarLibro::CantidadDeCopiasInvalida);}

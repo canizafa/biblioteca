@@ -74,6 +74,7 @@ impl Prestamo {
     }
   }
   pub fn agregar_fecha_devolucion(&mut self, fecha_devolucion: DateTime<Local>) -> Result<(), ErrorPrestamo> {
+    if self.fecha_devolucion.is_some() {return Err(ErrorPrestamo::PrestamoDevuelto);}
     self.fecha_devolucion = Some(fecha_devolucion);
     Ok(())
   }

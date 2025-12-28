@@ -23,6 +23,7 @@ pub enum ErrorPrestamo {
   PrestamoInexistente,
   EstadoInvalido,
   PrestamoExistente,
+  PrestamoDevuelto,
 }
 impl fmt::Display for ErrorPrestamo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -31,6 +32,7 @@ impl fmt::Display for ErrorPrestamo {
             ErrorPrestamo::PrestamoInexistente => write!(f,"El préstamo no existe"),
             ErrorPrestamo::EstadoInvalido => write!(f,"El cambio de estado no se pudo realizar"),
             ErrorPrestamo::PrestamoExistente => write!(f, "El prestamo ya fue ingresado"),
+            ErrorPrestamo::PrestamoDevuelto => write!(f, "El prestamo ya fue devuelto"),
         }
     }
 }
@@ -53,8 +55,8 @@ impl From<ErrorPrestamo> for ErrorLibreria {
 impl fmt::Display for ErrorLibreria {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ErrorLibreria::Libro(e) => write!(f,"Error de libro {}", e),
-            ErrorLibreria::Prestamo(e) => write!(f,"Error de prestamo {}",e),
+            ErrorLibreria::Libro(e) => write!(f,"{}", e),
+            ErrorLibreria::Prestamo(e) => write!(f,"{}",e),
         }
     }
 }
@@ -62,6 +64,7 @@ impl fmt::Display for ErrorLibreria {
 
 #[derive(Debug)]
 pub enum ErrorAgregarLibro {
+    TituloNulo,
     IsbnNulo,
     AutorNulo,
     FechaInvalida,
@@ -75,6 +78,7 @@ impl fmt::Display for ErrorAgregarLibro {
             ErrorAgregarLibro::AutorNulo => write!(f, "EL autor no puede estar vacío"),
             ErrorAgregarLibro::FechaInvalida => write!(f, "La fecha no puede ser superior a la fecha actual"),
             ErrorAgregarLibro::CantidadDeCopiasInvalida => write!(f, "La cantidad de copias no puede ser menor o igual a 0"),
+            ErrorAgregarLibro::TituloNulo => write!(f, "El titulo no puede ser nulo"),
             ErrorAgregarLibro::Libreria(e) => write!(f,"Error de libreria: {}",e),
         }
     }
@@ -172,7 +176,7 @@ pub enum ErrorApp {
 impl fmt::Display for ErrorApp {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ErrorApp::RegistrarPrestamo(e) => write!(f,"Error de registro de prestamo {}.",e),
+            ErrorApp::RegistrarPrestamo(e) => write!(f,"Error de registro de prestamo: {}.",e),
             ErrorApp::RegistrarDevolucion(e) => write!(f,"Error de devolucion: {}",e),
             ErrorApp::ListarLibros(e) => write!(f, "Error de listado de libros: {}",e),
             ErrorApp::ListarPrestamos(e) => write!(f,"Error al listar los prestamos: {}",e),
