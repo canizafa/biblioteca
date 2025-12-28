@@ -1,3 +1,5 @@
+use colored::Colorize;
+
 use crate::{biblioteca::Biblioteca, errores::{ErrorLibreria, ErrorPrestamo}};
 
 pub fn registrar_devolucion(isbn: u128, prestatario: String, libreria: &mut Biblioteca) -> Result<(), ErrorLibreria> {
@@ -6,6 +8,7 @@ pub fn registrar_devolucion(isbn: u128, prestatario: String, libreria: &mut Bibl
 
   libreria.registrar_devolucion(isbn, prestatario)?;
 
-  Ok(())
+  println!("{}\n", "Se ha registrado la devolución correctamente".bright_green().bold());
 
+  Ok(())
 }

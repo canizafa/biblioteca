@@ -32,7 +32,7 @@ pub fn agregar_libro(
     );
 
     biblioteca.incorporar_libro(libro)?;
-    println!("{}", "Se ha agregado correctamente el libro dentro del catalogo".green());
+    println!("{}\n", "Se ha agregado correctamente el libro dentro del catalogo".bright_green().bold());
 
   Ok(())
 }

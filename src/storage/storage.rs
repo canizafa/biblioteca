@@ -8,7 +8,7 @@ pub fn cargar_libreria(path: &str) -> Result<Biblioteca, ErrorLibreria> {
     if !Path::new(path).exists() {
       
         if let Some(parent) = Path::new(path).parent() {
-            if fs::create_dir_all(parent).is_err() {return Err(ErrorLibreria::PathNoEncontrado); }
+            fs::create_dir_all(parent).map_err(|_| ErrorLibreria::PathNoEncontrado)?;
         }
         
         let biblioteca_vacia = Biblioteca::new();
@@ -25,7 +25,7 @@ pub fn cargar_libreria(path: &str) -> Result<Biblioteca, ErrorLibreria> {
 pub fn guardar_libreria(libreria: &Biblioteca, path: &str) -> Result<(), ErrorLibreria> {
 
   if let Some(parent) = Path::new(path).parent() {
-    if fs::create_dir(parent).is_err() {return Err(ErrorLibreria::PathNoEncontrado);}
+    fs::create_dir(parent).map_err(|_| ErrorLibreria::PathNoEncontrado)?;
   }
 
   let json = serde_json::to_string_pretty(libreria).unwrap();

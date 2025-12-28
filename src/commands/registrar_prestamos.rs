@@ -1,3 +1,5 @@
+use colored::Colorize;
+
 use crate::{biblioteca::Biblioteca, errores::{ErrorLibreria, ErrorPrestamo}};
 
 
@@ -8,6 +10,7 @@ pub fn registrar_prestamo(isbn: u128, prestatario: String, libreria: &mut Biblio
 
   libreria.registrar_prestamo(isbn, prestatario)?;
 
+  println!("{}\n", "Se ha registrado el prestamo correctamente".bright_green().bold());
 
   Ok(())
 }
