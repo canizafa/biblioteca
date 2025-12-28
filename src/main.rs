@@ -13,7 +13,8 @@ use crate::commands::{
     listar_libros::listar_libros_por_autor,
     listar_prestamos_vigentes::listar_prestamos_vigentes,
     registrar_devolucion::registrar_devolucion,
-    registrar_prestamos::registrar_prestamo
+    registrar_prestamos::registrar_prestamo,
+    reporte_genero::reporte_genero,
 };
 use crate::errores::ErrorLibreria;
 use crate::models::libro::GeneroLiterario;
@@ -72,6 +73,9 @@ enum Action {
         #[arg(long)]
         prestatario: String
     },
+
+    #[command(name="reporte-generos", about="Consulte el reporte del género más solicitado")]
+    ReporteGenero,
 }
 
 fn main() -> Result<(), ErrorLibreria> {
@@ -128,6 +132,7 @@ fn main() -> Result<(), ErrorLibreria> {
             registrar_devolucion(isbn, prestatario, &mut libreria)
                 .unwrap_or_else(|e| println!("{}",e));
         },
+        Action::ReporteGenero => reporte_genero(&libreria),
     }
 
     guardar_libreria(&libreria, &path).unwrap_or_else(|e| println!("{}", e));

@@ -3,7 +3,8 @@ use core::fmt;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::errores::ErrorPrestamo;
+use crate::{errores::ErrorPrestamo, models::libro::GeneroLiterario};
+
 
 #[derive(Serialize, Deserialize, PartialEq)]
 pub enum EstadoPrestamo {
@@ -18,18 +19,27 @@ pub struct Prestamo {
   prestatario: String,
   estado_prestamo: EstadoPrestamo,
   fecha_prestamo: DateTime<Local>,
-  fecha_devolucion: Option<DateTime<Local>>
+  fecha_devolucion: Option<DateTime<Local>>,
+  genero_literario: GeneroLiterario,
 }
 
 impl Prestamo {
-  pub fn new(id: Uuid, isbn_libro: u128, prestatario: String, fecha_prestamo: DateTime<Local>, estado_prestamo: EstadoPrestamo) -> Self {
+  pub fn new(
+    id: Uuid, 
+    isbn_libro: u128, 
+    prestatario: String, 
+    fecha_prestamo: DateTime<Local>, 
+    estado_prestamo: EstadoPrestamo,
+    genero_literario: GeneroLiterario,
+  ) -> Self {
     Self {
       id, 
       isbn_libro,
       prestatario,
       fecha_prestamo,
       estado_prestamo,
-      fecha_devolucion: None
+      fecha_devolucion: None,
+      genero_literario
     }
   }
   // pub fn dias_transcurridos(&self) -> Result<(i64, EstadoPrestamo), ErrorPrestamo> {
@@ -53,18 +63,26 @@ impl Prestamo {
   //       }
   //   }
   // }
+
+  pub fn obtener_genero(&self) -> &GeneroLiterario {
+    &self.genero_literario
+  }
+
   pub fn esta_vigente(&self) -> bool {
     match self.estado_prestamo {
         EstadoPrestamo::Devuelto(_) => false,
         EstadoPrestamo::EnCurso => true,
     }
   }
+
   pub fn obtener_prestatario(&self) -> &String {
     &self.prestatario
   }
+
   pub fn obtener_isbn_libro(&self) -> u128 {
     self.isbn_libro
   }
+
   pub fn cambiar_estado(&mut self, estado_nuevo: EstadoPrestamo) -> Result<(), ErrorPrestamo> {
     if self.estado_prestamo == estado_nuevo {
       Err(ErrorPrestamo::EstadoInvalido)
@@ -73,6 +91,7 @@ impl Prestamo {
       Ok(())
     }
   }
+
   pub fn agregar_fecha_devolucion(&mut self, fecha_devolucion: DateTime<Local>) -> Result<(), ErrorPrestamo> {
     if self.fecha_devolucion.is_some() {return Err(ErrorPrestamo::PrestamoDevuelto);}
     self.fecha_devolucion = Some(fecha_devolucion);

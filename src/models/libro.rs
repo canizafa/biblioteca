@@ -4,7 +4,7 @@ use crate::errores::ErrorLibro;
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GeneroLiterario {
   Romance,
   Thriller,
@@ -59,12 +59,15 @@ impl Libro {
       copias_disponibles
     }
   }
+
   pub fn obtener_isbn(&self) -> u128 {
     self.isbn
   }
+
   pub fn comparar_autor(&self, autor: &String) -> bool {
     self.autor == *autor
   }
+
   pub fn disminuir_copias(&mut self) -> Result<u8, ErrorLibro> {
     if self.copias_disponibles > 0 {
       self.copias_disponibles -= 1;
@@ -73,9 +76,15 @@ impl Libro {
       Err(ErrorLibro::CopiasInsuficientes)
     }
   }
+
   pub fn aumentar_copias(&mut self) {
     self.copias_disponibles += 1;
   }
+
+  pub fn obtener_genero(&self) -> &GeneroLiterario {
+    &self.genero
+  }
+
 }
 impl fmt::Display for Libro {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

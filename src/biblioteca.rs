@@ -2,7 +2,7 @@ use chrono::Local;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::{errores::{ErrorLibreria, ErrorLibro, ErrorPrestamo}, models::{libro::Libro, prestamo::{self, Prestamo}}};
+use crate::{errores::{ErrorLibreria, ErrorLibro, ErrorPrestamo}, models::{libro::{GeneroLiterario, Libro}, prestamo::{self, Prestamo}}};
 
 
 #[derive(Serialize, Deserialize)]
@@ -46,7 +46,8 @@ impl Biblioteca {
         libro.obtener_isbn(),
         prestatario, 
         Local::now(), 
-        prestamo::EstadoPrestamo::EnCurso
+        prestamo::EstadoPrestamo::EnCurso,
+        libro.obtener_genero().clone(),
       );
   
       self.prestamos.push(prestamo);
@@ -85,5 +86,18 @@ impl Biblioteca {
       Ok(())
     }
   }
+
+  pub fn devolver_generos_prestamos(&self) -> Option<Vec<&GeneroLiterario>> {
+    
+    if self.prestamos.is_empty() {return None;}
+
+    let mut vec = Vec::new();
+
+    self.prestamos.iter()
+      .for_each(|p| vec.push(p.obtener_genero()));
+
+    Some(vec)
+  }
+
 }
 
