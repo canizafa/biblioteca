@@ -1,18 +1,27 @@
 use colored::Colorize;
 
-use crate::{biblioteca::Biblioteca, errores::{ErrorLibreria, ErrorLibro}};
-
+use crate::{
+    biblioteca::Biblioteca,
+    errores::{ErrorLibreria, ErrorLibro},
+};
 
 pub fn listar_libros_por_autor(libreria: &Biblioteca, autor: String) -> Result<(), ErrorLibreria> {
+    if autor.trim().is_empty() {
+        return Err(ErrorLibreria::Libro(ErrorLibro::AutorNulo));
+    }
 
-  if autor.trim().is_empty() {return Err(ErrorLibreria::Libro(ErrorLibro::AutorNulo))}
-  
-  let lista = libreria.listar_libros_por_autor(autor);
-  if let Some(lista) = lista {
-    println!("{}","---------------".purple().bold());
-    lista.iter().for_each(|l| println!("{}\n{}\n",l, "---------------".purple().bold()));
+    let lista = libreria.listar_libros_por_autor(autor);
+    if let Some(lista) = lista {
+        println!("{}", "---------------".purple().bold());
+        lista
+            .iter()
+            .for_each(|l| println!("{}\n{}\n", l, "---------------".purple().bold()));
+    } else {
+        println!(
+            "{}\n",
+            "La lista de libros se encuentra vacía".blue().bold()
+        )
+    }
 
-  } else { println!("{}\n", "La lista de libros se encuentra vacía".blue().bold()) }
-
-  Ok(())
+    Ok(())
 }

@@ -1,16 +1,30 @@
 use colored::Colorize;
 
-use crate::{biblioteca::Biblioteca, errores::{ErrorLibreria, ErrorPrestamo}};
+use crate::{
+    biblioteca::Biblioteca,
+    errores::{ErrorLibreria, ErrorPrestamo},
+};
 
+pub fn registrar_prestamo(
+    isbn: u128,
+    prestatario: String,
+    libreria: &mut Biblioteca,
+) -> Result<(), ErrorLibreria> {
+    if isbn <= 0 {
+        return Err(ErrorLibreria::Prestamo(ErrorPrestamo::IsbnNulo));
+    }
+    if prestatario.trim().is_empty() {
+        return Err(ErrorLibreria::Prestamo(ErrorPrestamo::PrestatarioNulo));
+    }
 
-pub fn registrar_prestamo(isbn: u128, prestatario: String, libreria: &mut Biblioteca) -> Result<(), ErrorLibreria> {
+    libreria.registrar_prestamo(isbn, prestatario)?;
 
-  if isbn <= 0 {return Err(ErrorLibreria::Prestamo(ErrorPrestamo::IsbnNulo));}
-  if prestatario.trim().is_empty() {return Err(ErrorLibreria::Prestamo(ErrorPrestamo::PrestatarioNulo));}
+    println!(
+        "{}\n",
+        "Se ha registrado el prestamo correctamente"
+            .bright_green()
+            .bold()
+    );
 
-  libreria.registrar_prestamo(isbn, prestatario)?;
-
-  println!("{}\n", "Se ha registrado el prestamo correctamente".bright_green().bold());
-
-  Ok(())
+    Ok(())
 }
