@@ -1,4 +1,4 @@
-use chrono::{Utc};
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -24,21 +24,20 @@ impl Biblioteca {
     }
 
     pub fn listar_libros_por_autor(&self, autor: String) -> Option<Vec<&Libro>> {
+        if self.libros.is_empty() {
+            return None;
+        }
         let lista: Vec<&Libro> = self
             .libros
             .iter()
             .filter(|l| l.comparar_autor(&autor))
             .collect();
 
-        if lista.is_empty() {
-            return None;
-        }
-
         Some(lista)
     }
 
     pub fn listar_prestamos_vigentes(&self) -> Option<Vec<&Prestamo>> {
-        if self.prestamos.len() <= 0 {
+        if self.prestamos.is_empty() {
             return None;
         }
         Some(self.prestamos.iter().filter(|p| p.esta_vigente()).collect())
@@ -88,7 +87,8 @@ impl Biblioteca {
             .find(|p| p.obtener_isbn_libro() == isbn && *p.obtener_prestatario() == prestatario)
             .ok_or(ErrorLibreria::Prestamo(ErrorPrestamo::PrestamoInexistente))?;
 
-        prestamo_buscado.cambiar_estado(prestamo::EstadoPrestamo::Devuelto(Utc::now().date_naive()))?;
+        prestamo_buscado
+            .cambiar_estado(prestamo::EstadoPrestamo::Devuelto(Utc::now().date_naive()))?;
         prestamo_buscado.agregar_fecha_devolucion(Utc::now().date_naive())?;
 
         if let Some(libro) = self.libros.iter_mut().find(|l| l.obtener_isbn() == isbn) {
@@ -125,25 +125,20 @@ impl Biblioteca {
         Some(vec)
     }
     pub fn calcular_promedio_dias_prestamo(&self) -> Option<f64> {
-        if self.prestamos.len() == 0 {
+        if self.prestamos.is_empty() {
             return None;
         }
-        let obtener_dias: f64 = self
+        let suma_dias: f64 = self
             .prestamos
             .iter()
             .filter_map(|p| p.dias_transcurridos())
             .sum();
-        let cant_prestamos = self
-            .prestamos
-            .iter()
-            .filter(|p| !p.esta_vigente())
-            .count() as f64;
+        let cant_prestamos = self.prestamos.iter().filter(|p| !p.esta_vigente()).count();
 
-        if cant_prestamos == 0 as f64 {
+        if cant_prestamos == 0 {
             None
         } else {
-            Some(obtener_dias/cant_prestamos)
+            Some(suma_dias / cant_prestamos as f64)
         }
-
     }
 }
